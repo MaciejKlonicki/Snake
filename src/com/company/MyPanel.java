@@ -7,6 +7,8 @@ import java.util.Random;
 
 public class MyPanel extends JPanel implements ActionListener {
 
+    JButton playAgain = new JButton("Play Again!");
+    JButton exit = new JButton("Exit");
     final int SCREEN_WIDTH = 600;
     final int SCREEN_HEIGHT = 600;
     final int UNIT_SIZE = 25;
@@ -132,7 +134,9 @@ public class MyPanel extends JPanel implements ActionListener {
         if ((y[0]>SCREEN_HEIGHT-UNIT_SIZE)){
             running = false;
         }
+
         if (!running){
+
             timer.stop();
         }
     }
@@ -150,16 +154,37 @@ public class MyPanel extends JPanel implements ActionListener {
         g.setFont(new Font("Ink Free",Font.BOLD,75));
         FontMetrics metrics = getFontMetrics(g.getFont());
         g.drawString("Game OVER",(SCREEN_WIDTH - metrics.stringWidth("Game OVER"))/2, SCREEN_HEIGHT/2);
+
+        playAgain.setFocusable(false);
+        playAgain.setBounds(240,350,100,50);
+        playAgain.addActionListener(this);
+        this.add(playAgain);
+
+        exit.setFocusable(false);
+        exit.setBounds(240,450,100,50);
+        exit.addActionListener(this);
+        this.add(exit);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (running){
+        if (running) {
             move();
             checkApple();
             checkCollisions();
         }
         repaint();
+
+        if (e.getSource() == playAgain) {
+            StartFrame startFrame = new StartFrame();
+            JComponent comp = (JComponent) e.getSource();
+            Window win = SwingUtilities.getWindowAncestor(comp);
+            win.dispose();
+        }
+
+        if(e.getSource() == exit) {
+            System.exit(0);
+        }
     }
 
     public class MyKeyAdapter extends KeyAdapter {
