@@ -13,7 +13,7 @@ public class MyPanel extends JPanel implements ActionListener {
     final int SCREEN_HEIGHT = 600;
     final int UNIT_SIZE = 25;
     final int GAME_UNITS = (SCREEN_WIDTH*SCREEN_HEIGHT)/UNIT_SIZE;
-    final int DELAY = 80;
+    final int DELAY = 75;
     final int x[] = new int[GAME_UNITS];
     final int y[] = new int[GAME_UNITS];
     int bodyParts = 4;
@@ -24,9 +24,7 @@ public class MyPanel extends JPanel implements ActionListener {
     boolean running = false;
     Timer timer;
     Random random;
-    private Image ball;
-    private Image apple;
-    private Image head;
+
 
     MyPanel(){
         random = new Random();
@@ -35,7 +33,6 @@ public class MyPanel extends JPanel implements ActionListener {
         this.setFocusable(true);
         this.addKeyListener(new MyKeyAdapter());
         startGame();
-        loadImages();
     }
 
     public void startGame () {
@@ -43,18 +40,6 @@ public class MyPanel extends JPanel implements ActionListener {
         running = true;
         timer = new Timer(DELAY,this);
         timer.start();
-    }
-
-    private void loadImages() {
-
-        ImageIcon iid = new ImageIcon("body.png");
-        ball = iid.getImage();
-
-        ImageIcon iia = new ImageIcon("apple.png");
-        apple = iia.getImage();
-
-        ImageIcon iih = new ImageIcon("rec.png");
-        head = iih.getImage();
     }
 
     public void paintComponent (Graphics g) {
@@ -72,16 +57,18 @@ public class MyPanel extends JPanel implements ActionListener {
                 g.drawLine(0, i * UNIT_SIZE, SCREEN_WIDTH, i * UNIT_SIZE);
             }
             */
+            g.setColor(Color.RED);
+            g.fillOval(appleX, appleY, UNIT_SIZE, UNIT_SIZE);
 
-            g.drawImage(apple,appleX,appleY,null);
-            for (int i = 0 ; i < bodyParts ; i++) {
-                if (i ==0) {
-                    g.drawImage(head,x[0],y[0],null);
+            for (int i = 0; i < bodyParts; i++) {
+                if (i == 0) {
+                    g.setColor(Color.GREEN);
+                    g.fillRect(x[i], y[i], UNIT_SIZE, UNIT_SIZE);
                 } else {
-                    g.drawImage(ball,x[i],y[i],null);
+                    g.setColor(new Color(45, 180, 0));
+                    g.fillRect(x[i], y[i], UNIT_SIZE, UNIT_SIZE);
                 }
             }
-
             g.setColor(Color.RED);
             g.setFont(new Font("Ink Free",Font.BOLD,40));
             FontMetrics metrics = getFontMetrics(g.getFont());

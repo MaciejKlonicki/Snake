@@ -1,6 +1,7 @@
 package com.company;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class MyFrame extends JFrame {
 
@@ -12,5 +13,6 @@ public class MyFrame extends JFrame {
         this.pack();
         this.setLocationRelativeTo(null);
         this.setVisible(true);
+        this.setIconImage(Toolkit.getDefaultToolkit().getImage("sr.png"));
     }
 }

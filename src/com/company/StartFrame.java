@@ -60,6 +60,8 @@ public class StartFrame extends JFrame implements ActionListener {
         buttonToOpenScoreboard.setBorder(border);
         buttonToOpenWindowGame.setBorder(border);
 
+        this.setIconImage(Toolkit.getDefaultToolkit().getImage("sr.png"));
+
 
         this.add(buttonToOpenScoreboard);
         this.add(buttonToOpenWindowGame);
