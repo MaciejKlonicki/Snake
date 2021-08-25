@@ -78,12 +78,17 @@ public class MyPanel extends JPanel implements ActionListener {
             gameOver(g);
         }
     }
-
     public void newApple () {
-        appleX = random.nextInt((int)SCREEN_WIDTH/UNIT_SIZE)*UNIT_SIZE;
-        appleY = random.nextInt((int)SCREEN_HEIGHT/UNIT_SIZE)*UNIT_SIZE;
-    }
+                appleX = random.nextInt((int) SCREEN_WIDTH / UNIT_SIZE) * UNIT_SIZE;
+                appleY = random.nextInt((int) SCREEN_HEIGHT / UNIT_SIZE) * UNIT_SIZE;
 
+                for (int i = 0 ; i<=bodyParts-1;i++){
+                    if (x[i]==appleX && y[i]==appleY) {
+                        appleX = random.nextInt((int) SCREEN_WIDTH / UNIT_SIZE) * UNIT_SIZE;
+                        appleY = random.nextInt((int) SCREEN_HEIGHT / UNIT_SIZE) * UNIT_SIZE;
+                    }
+                }
+    }
     public void move () {
         for(int i = bodyParts ; i > 0 ; i--) {
             x[i] = x[i-1];

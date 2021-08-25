@@ -1,6 +1,7 @@
 package com.company;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,6 +13,7 @@ public class StartFrame extends JFrame implements ActionListener {
     JButton buttonToExitTheGame;
     JLabel label = new JLabel();
     ImageIcon icon = new ImageIcon("baaak.jpg");
+    Border border = BorderFactory.createLineBorder(Color.BLACK,2);
 
 
     StartFrame(){
@@ -19,6 +21,7 @@ public class StartFrame extends JFrame implements ActionListener {
         this.setSize(600,600);
         this.setLocationRelativeTo(null);
         this.setResizable(false);
+        this.setTitle("Snake");
         label.setIcon(icon);
 
         buttonToOpenWindowGame = new JButton("Start");
@@ -41,9 +44,22 @@ public class StartFrame extends JFrame implements ActionListener {
         buttonToOpenWindowGame.setBorder(BorderFactory.createEtchedBorder());
         buttonToExitTheGame.setBorder(BorderFactory.createEtchedBorder());
 
-        buttonToOpenWindowGame.setBounds(250,350,110,40);
-        buttonToOpenScoreboard.setBounds(250,400,110,40);
-        buttonToExitTheGame.setBounds(250,450,110,40);
+        buttonToOpenWindowGame.setBounds(250,170,110,60);
+        buttonToOpenScoreboard.setBounds(250,270,110,60);
+        buttonToExitTheGame.setBounds(250,370,110,60);
+
+        buttonToExitTheGame.setBackground(Color.GRAY);
+        buttonToOpenScoreboard.setBackground(Color.GRAY);
+        buttonToOpenWindowGame.setBackground(Color.GRAY);
+
+        buttonToOpenWindowGame.setForeground(Color.BLACK);
+        buttonToOpenScoreboard.setForeground(Color.BLACK);
+        buttonToExitTheGame.setForeground(Color.BLACK);
+
+        buttonToExitTheGame.setBorder(border);
+        buttonToOpenScoreboard.setBorder(border);
+        buttonToOpenWindowGame.setBorder(border);
+
 
         this.add(buttonToOpenScoreboard);
         this.add(buttonToOpenWindowGame);
