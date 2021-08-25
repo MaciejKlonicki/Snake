@@ -14,7 +14,7 @@ public class MyPanel extends JPanel implements ActionListener {
     final int DELAY = 75;
     final int x[] = new int[GAME_UNITS];
     final int y[] = new int[GAME_UNITS];
-    int bodyParts = 5;
+    int bodyParts = 4;
     int applesEaten = 0;
     int appleX;
     int appleY;
@@ -111,7 +111,7 @@ public class MyPanel extends JPanel implements ActionListener {
 
     public void checkCollisions () {
         //checks if head collides with body
-        for (int i = bodyParts ; i>0 ; i--) {
+        for (int i = bodyParts ; i > 0 ; i--) {
             if ((x[0] == x[i])&&(y[0] == y[i])) {
                 running = false;
             }
@@ -121,7 +121,7 @@ public class MyPanel extends JPanel implements ActionListener {
             running = false;
         }
         //check if head touches right border
-        if ((x[0]>SCREEN_WIDTH)){
+        if ((x[0]>SCREEN_WIDTH-UNIT_SIZE)){
             running = false;
         }
         //check if head touches top border
@@ -129,7 +129,7 @@ public class MyPanel extends JPanel implements ActionListener {
             running = false;
         }
         //check if head touches bottom border
-        if ((y[0]>SCREEN_HEIGHT)){
+        if ((y[0]>SCREEN_HEIGHT-UNIT_SIZE)){
             running = false;
         }
         if (!running){
