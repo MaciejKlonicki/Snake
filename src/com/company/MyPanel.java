@@ -1,25 +1,37 @@
 package com.company;
 
+import javax.sound.sampled.*;
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.Random;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class MyPanel extends JPanel implements ActionListener {
 
+    Clip clip;
+    AudioInputStream inputStream = AudioSystem.getAudioInputStream(new File("mixkit-retro-arcade-game-over-470.wav"));
     JButton playAgain = new JButton("Play Again!");
+    Border border = BorderFactory.createLineBorder(Color.BLACK,2);
     JButton exit = new JButton("Exit");
-    final int SCREEN_WIDTH = 600;
-    final int SCREEN_HEIGHT = 600;
-    final int UNIT_SIZE = 25;
-    final int GAME_UNITS = (SCREEN_WIDTH*SCREEN_HEIGHT)/UNIT_SIZE;
-    final int DELAY = 90;
-    final int x[] = new int[GAME_UNITS];
-    final int y[] = new int[GAME_UNITS];
-    int bodyParts = 4;
-    int applesEaten = 0;
+    final int WIDTH = 600;
+    final int HEIGHT = 600;
+    final int uSize = 25;
+    final int gUnits = (WIDTH*HEIGHT)/uSize;
+    final int x[] = new int[gUnits];
+    final int y[] = new int[gUnits];
+    int bananaX;
+    int bananaY;
     int appleX;
     int appleY;
+    int bParts = 4;
+    int delay = 90;
+    int applesEaten;
     char direction = 'R';
     boolean running = false;
     Timer timer;
@@ -27,11 +39,13 @@ public class MyPanel extends JPanel implements ActionListener {
     private Image ball;
     private Image apple;
     private Image head;
+    private Image banana;
+    private Image back;
 
 
-    MyPanel(){
+    MyPanel() throws InterruptedException, UnsupportedAudioFileException, IOException, LineUnavailableException {
         random = new Random();
-        this.setPreferredSize(new Dimension(SCREEN_WIDTH,SCREEN_HEIGHT));
+        this.setPreferredSize(new Dimension(WIDTH,HEIGHT));
         this.setBackground(Color.BLACK);
         this.setFocusable(true);
         this.addKeyListener(new MyKeyAdapter());
@@ -40,10 +54,11 @@ public class MyPanel extends JPanel implements ActionListener {
 
     }
 
-    public void startGame () {
+    public void startGame () throws InterruptedException, LineUnavailableException, IOException {
         newApple();
+        Events();
         running = true;
-        timer = new Timer(DELAY,this);
+        timer = new Timer(delay,this);
         timer.start();
     }
 
@@ -57,93 +72,124 @@ public class MyPanel extends JPanel implements ActionListener {
 
         ImageIcon iih = new ImageIcon("rec.png");
         head = iih.getImage();
+
+        ImageIcon iis = new ImageIcon("banana.png");
+        banana = iis.getImage();
+
+        ImageIcon iib = new ImageIcon("baaak.jpg");
+        back = iib.getImage();
     }
 
     public void paintComponent (Graphics g) {
         super.paintComponent(g);
-        draw(g);
+        try {
+            draw(g);
+        } catch (LineUnavailableException | IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void draw (Graphics g) {
+    public void draw (Graphics g) throws LineUnavailableException, IOException {
         if (running) {
 
+            g.drawImage(banana,bananaX,bananaY,null);
+
             g.drawImage(apple,appleX,appleY,null);
-            for (int i = 0 ; i < bodyParts ; i++) {
+            for (int i = 0 ; i < bParts ; i++) {
                 if (i == 0) {
                     g.drawImage(head,x[0],y[0],null);
                 } else {
                     g.drawImage(ball,x[i],y[i],null);
                 }
             }
-
-            g.setColor(Color.RED);
-            g.setFont(new Font("Ink Free",Font.BOLD,40));
-            FontMetrics metrics = getFontMetrics(g.getFont());
-            g.drawString("Score: " + applesEaten,(SCREEN_WIDTH - metrics.stringWidth("Score: " + applesEaten))/2, g.getFont().getSize());
         }
         else {
             gameOver(g);
         }
     }
-    public void newApple () {
-                appleX = random.nextInt((int) SCREEN_WIDTH / UNIT_SIZE) * UNIT_SIZE;
-                appleY = random.nextInt((int) SCREEN_HEIGHT / UNIT_SIZE) * UNIT_SIZE;
 
-                for (int i = 0 ; i<=bodyParts-1;i++){
-                    if (x[i]==appleX && y[i]==appleY) {
-                        appleX = random.nextInt((int) SCREEN_WIDTH / UNIT_SIZE) * UNIT_SIZE;
-                        appleY = random.nextInt((int) SCREEN_HEIGHT / UNIT_SIZE) * UNIT_SIZE;
+    public void Events () {
+
+        ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+        executorService.scheduleAtFixedRate(new Runnable() {
+            @Override
+            public void run() {
+                bananaX = random.nextInt((int) WIDTH / uSize) * uSize;
+                bananaY = random.nextInt((int) HEIGHT / uSize) * uSize;
+
+                for (int i = 0; i <= bParts - 1; i++) {
+                    if ((x[i] == bananaX && y[i] == bananaY) || (bananaX == appleX && bananaY == appleY)) {
+                        bananaX = random.nextInt((int) WIDTH / uSize) * uSize;
+                        bananaY = random.nextInt((int) HEIGHT / uSize) * uSize;
                     }
                 }
+            }
+        },0,12,TimeUnit.SECONDS);
     }
-    public void move () {
-        for(int i = bodyParts ; i > 0 ; i--) {
-            x[i] = x[i-1];
-            y[i] = y[i-1];
-        }
 
-        switch (direction) {
-            case 'U' : y[0] = y [0] - UNIT_SIZE;
-            break;
-            case 'D' : y[0] = y [0] + UNIT_SIZE;
-            break;
-            case 'L' : x[0] = x [0] - UNIT_SIZE;
-            break;
-            case 'R' : x[0] = x [0] + UNIT_SIZE;
-            break;
-        }
+    public void newApple () {
+                appleX = random.nextInt((int) WIDTH / uSize) * uSize;
+                appleY = random.nextInt((int) HEIGHT / uSize) * uSize;
 
+                for (int i = 0 ; i<=bParts-1;i++){
+                    if (x[i]==appleX && y[i]==appleY) {
+                        appleX = random.nextInt((int) WIDTH / uSize) * uSize;
+                        appleY = random.nextInt((int) HEIGHT / uSize) * uSize;
+                    }
+                }
     }
 
     public void checkApple() {
         if ((x[0] == appleX) && (y[0] == appleY)) {
-            bodyParts++;
+            bParts++;
             applesEaten++;
             newApple();
         }
     }
 
+    public void checkBananas() throws InterruptedException {
+
+        if ((x[0] == bananaX) && (y[0] == bananaY)) {
+            applesEaten=applesEaten+2;
+            Events();
+        }
+    }
+
+    public void move () {
+        for(int i = bParts ; i > 0 ; i--) {
+            x[i] = x[i-1];
+            y[i] = y[i-1];
+        }
+
+        switch (direction) {
+            case 'U' : y[0] = y [0] - uSize;
+            break;
+            case 'D' : y[0] = y [0] + uSize;
+            break;
+            case 'L' : x[0] = x [0] - uSize;
+            break;
+            case 'R' : x[0] = x [0] + uSize;
+            break;
+        }
+
+    }
+
     public void checkCollisions () {
-        //checks if head collides with body
-        for (int i = bodyParts ; i > 0 ; i--) {
+        for (int i = bParts ; i > 0 ; i--) {
             if ((x[0] == x[i])&&(y[0] == y[i])) {
                 running = false;
             }
         }
-        //check if head touches left border
         if (x[0]<0) {
             running = false;
         }
-        //check if head touches right border
-        if ((x[0]>SCREEN_WIDTH-UNIT_SIZE)){
+        if ((x[0]>WIDTH-uSize)){
             running = false;
         }
-        //check if head touches top border
         if (y[0]<0){
             running = false;
         }
-        //check if head touches bottom border
-        if ((y[0]>SCREEN_HEIGHT-UNIT_SIZE)){
+        if ((y[0]>HEIGHT-uSize)){
             running = false;
         }
 
@@ -153,29 +199,39 @@ public class MyPanel extends JPanel implements ActionListener {
         }
     }
 
-    public void gameOver (Graphics g) {
+    public void gameOver (Graphics g) throws LineUnavailableException, IOException {
 
-        //Score
-        g.setColor(Color.RED);
-        g.setFont(new Font("Ink Free",Font.BOLD,40));
+        g.drawImage(back, 0, 0, this);
+
+        g.setColor(Color.GREEN);
+        g.setFont(new Font("Times New Roman", Font.BOLD, 30));
         FontMetrics metrics1 = getFontMetrics(g.getFont());
-        g.drawString("Score:" + applesEaten,(SCREEN_WIDTH - metrics1.stringWidth("Score:" + applesEaten))/2, g.getFont().getSize());
+        g.drawString("Score:" + applesEaten, (WIDTH - metrics1.stringWidth("Score:" + applesEaten)) / 2, g.getFont().getSize());
 
-        //Game OVER text
-        g.setColor(Color.RED);
-        g.setFont(new Font("Ink Free",Font.BOLD,75));
-        FontMetrics metrics = getFontMetrics(g.getFont());
-        g.drawString("Game OVER",(SCREEN_WIDTH - metrics.stringWidth("Game OVER"))/2, SCREEN_HEIGHT/2);
 
         playAgain.setFocusable(false);
-        playAgain.setBounds(240,350,100,50);
+        playAgain.setBounds(240, 350, 100, 50);
         playAgain.addActionListener(this);
+        playAgain.setFont(new Font(Font.DIALOG, Font.BOLD, 15));
+        playAgain.setBorder(BorderFactory.createEtchedBorder());
+        playAgain.setBackground(Color.GRAY);
+        playAgain.setForeground(Color.BLACK);
+        playAgain.setBorder(border);
         this.add(playAgain);
 
         exit.setFocusable(false);
-        exit.setBounds(240,450,100,50);
+        exit.setBounds(240, 450, 100, 50);
         exit.addActionListener(this);
+        exit.setFont(new Font(Font.DIALOG, Font.BOLD, 15));
+        exit.setBorder(BorderFactory.createEtchedBorder());
+        exit.setBackground(Color.GRAY);
+        exit.setForeground(Color.BLACK);
+        exit.setBorder(border);
         this.add(exit);
+
+        clip = AudioSystem.getClip();
+        clip.open(inputStream);
+        clip.start();
     }
 
     @Override
@@ -184,6 +240,11 @@ public class MyPanel extends JPanel implements ActionListener {
             move();
             checkApple();
             checkCollisions();
+            try {
+                checkBananas();
+            } catch (InterruptedException interruptedException) {
+                interruptedException.printStackTrace();
+            }
         }
         repaint();
 

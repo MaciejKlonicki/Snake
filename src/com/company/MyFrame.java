@@ -1,11 +1,14 @@
 package com.company;
 
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 
 public class MyFrame extends JFrame {
 
-    MyFrame(){
+    MyFrame() throws InterruptedException, UnsupportedAudioFileException, IOException, LineUnavailableException {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.add(new MyPanel());
         this.setTitle("Snake");
