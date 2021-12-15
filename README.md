@@ -15,6 +15,3 @@ A version of the classic game Snake implemented in Java using JavaSWING.
 - Music
 - Graphics for head and body of our snake
 - Graphics for apple and banana
-
-
-[README.md](https://github.com/MaciejKlonicki/Snake/files/7719452/README.md)
