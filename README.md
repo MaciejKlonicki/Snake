@@ -1,0 +1,2 @@
+Singleplayer chess game.
+
