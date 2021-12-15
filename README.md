@@ -13,4 +13,7 @@ A version of the classic game Snake implemented in Java using JavaSWING.
 - If we ate apple - 1 point
 - If we ate banana - 2 points
 - Music
+- Graphics for head and body of our snake
+- Graphics for apple and banana
+
 
