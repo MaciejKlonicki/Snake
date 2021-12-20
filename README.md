@@ -3,7 +3,7 @@
 A version of the classic game Snake implemented in Java using JavaSWING.
 
 
-#########FEATURES 
+# FEATURES 
 - Snake
 - Apple
 - Bananas
@@ -18,7 +18,7 @@ A version of the classic game Snake implemented in Java using JavaSWING.
 - Graphics for apple and banana
 
 
-Screenshots:
+# Screenshots:
 
 ![image](https://user-images.githubusercontent.com/82573905/146192616-0bf9c189-2c6f-4b1e-a7f9-e36ff49fc0cf.png)
 
