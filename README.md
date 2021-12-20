@@ -1,4 +1,4 @@
-#SNAKE GAME
+# SNAKE GAME
 
 A version of the classic game Snake implemented in Java using JavaSWING.
 
