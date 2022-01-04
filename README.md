@@ -1,6 +1,7 @@
 # SNAKE GAME
 
-A version of the classic game Snake implemented in Java using JavaSWING.
+A version of the classic game Snake implemented in Java using JAVA SWING.
+Vision of the game was taken from YT videos - but i wrote the code by myself
 
 
 # FEATURES 
@@ -25,3 +26,5 @@ A version of the classic game Snake implemented in Java using JavaSWING.
 ![image](https://user-images.githubusercontent.com/82573905/146192636-e04f5463-f1b7-4f75-953d-3b8d8222a014.png)
 
 ![image](https://user-images.githubusercontent.com/82573905/146192659-1b8da81f-f92b-4cbc-be62-d225ec9a7b56.png)
+
+#MK#
