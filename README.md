@@ -1,22 +1,22 @@
 # SNAKE GAME
 
-A version of the classic game Snake implemented in Java using JAVA SWING.
-Vision of the game was taken from YT videos - but i wrote the code by myself
+A version of the classic Snake game implemented in Java using JAVA SWING.
+Vision of the game was taken from YT videos.
 
 
 # FEATURES 
-- Snake
-- Apple
-- Bananas
-- Snake is growing 
-- If we hit the wall - game ends
-- Counting points
-- If we ate apple - 1 point
-- If we ate banana - 2 points
-- Banana change position in 1 to 10 second.
-- Music
-- Graphics for head and body of our snake
-- Graphics for apple and banana
+- Snake,
+- Apple,
+- Bananas,
+- Snake is growing,
+- If we hit the wall - game end's,
+- Counting point's,
+- If we ate apple - 1 point,
+- If we ate banana - 2 points,
+- Banana change position in 1 to 10 seconds,
+- Music,
+- Graphics for head and body of our snake,
+- Graphics for apple and banana.
 
 
 # Screenshots:
@@ -27,4 +27,5 @@ Vision of the game was taken from YT videos - but i wrote the code by myself
 
 ![image](https://user-images.githubusercontent.com/82573905/146192659-1b8da81f-f92b-4cbc-be62-d225ec9a7b56.png)
 
-#MK#
+
+
