@@ -10,16 +10,15 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 
 public class StartFrame extends JFrame implements ActionListener{
-
     JButton buttonToOpenWindowGame;
     JButton buttonToExitTheGame;
     JLabel label = new JLabel();
     ImageIcon icon = new ImageIcon("baaak.jpg");
-    Border border = BorderFactory.createLineBorder(Color.BLACK,2);
+    private static final Border border = BorderFactory.createLineBorder(Color.BLACK,2);
 
 
     StartFrame(){
-        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         this.setSize(600,600);
         this.setLocationRelativeTo(null);
         this.setResizable(false);
@@ -66,14 +65,9 @@ public class StartFrame extends JFrame implements ActionListener{
         if(e.getSource() == buttonToOpenWindowGame) {
             try {
                 MyFrame myFrame = new MyFrame();
-            } catch (InterruptedException interruptedException) {
+            } catch (InterruptedException | LineUnavailableException | IOException |
+                     UnsupportedAudioFileException interruptedException) {
                 interruptedException.printStackTrace();
-            } catch (UnsupportedAudioFileException unsupportedAudioFileException) {
-                unsupportedAudioFileException.printStackTrace();
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
-            } catch (LineUnavailableException lineUnavailableException) {
-                lineUnavailableException.printStackTrace();
             }
             this.dispose();
         }
@@ -81,5 +75,4 @@ public class StartFrame extends JFrame implements ActionListener{
             System.exit(0);
         }
     }
-
 }

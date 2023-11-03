@@ -9,7 +9,7 @@ import java.io.IOException;
 public class MyFrame extends JFrame {
 
     MyFrame() throws InterruptedException, UnsupportedAudioFileException, IOException, LineUnavailableException {
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.add(new MyPanel());
         this.setTitle("Snake");
         this.setResizable(false);

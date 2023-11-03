@@ -4,7 +4,10 @@ import javax.sound.sampled.*;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.Random;
@@ -19,10 +22,10 @@ public class MyPanel extends JPanel implements ActionListener {
     JButton playAgain = new JButton("Play Again!");
     Border border = BorderFactory.createLineBorder(Color.BLACK,2);
     JButton exit = new JButton("Exit");
-    final int WIDTH = 600;
-    final int HEIGHT = 600;
-    final int uSize = 25;
-    final int gUnits = (WIDTH*HEIGHT)/uSize;
+    static final int WIDTH = 600;
+    static final int HEIGHT = 600;
+    static final int uSize = 25;
+    static final int gUnits = (WIDTH*HEIGHT)/uSize;
     final int x[] = new int[gUnits];
     final int y[] = new int[gUnits];
     int bananaX;
@@ -36,14 +39,14 @@ public class MyPanel extends JPanel implements ActionListener {
     boolean running = false;
     Timer timer;
     Random random;
-    private Image ball;
-    private Image apple;
-    private Image head;
-    private Image banana;
-    private Image back;
+    private static Image ball;
+    private static Image apple;
+    private static Image head;
+    private static Image banana;
+    private static Image back;
 
 
-    MyPanel() throws InterruptedException, UnsupportedAudioFileException, IOException, LineUnavailableException {
+    MyPanel() throws InterruptedException, IOException, LineUnavailableException, UnsupportedAudioFileException {
         random = new Random();
         this.setPreferredSize(new Dimension(WIDTH,HEIGHT));
         this.setBackground(Color.BLACK);
@@ -54,15 +57,15 @@ public class MyPanel extends JPanel implements ActionListener {
 
     }
 
-    public void startGame () throws InterruptedException, LineUnavailableException, IOException {
+    public void startGame () {
         newApple();
-        Events();
+        events();
         running = true;
         timer = new Timer(delay,this);
         timer.start();
     }
 
-    private void loadImages() {
+    private static void loadImages() {
 
         ImageIcon iid = new ImageIcon("body.png");
         ball = iid.getImage();
@@ -80,6 +83,7 @@ public class MyPanel extends JPanel implements ActionListener {
         back = iib.getImage();
     }
 
+    @Override
     public void paintComponent (Graphics g) {
         super.paintComponent(g);
         try {
@@ -108,33 +112,30 @@ public class MyPanel extends JPanel implements ActionListener {
         }
     }
 
-    public void Events () {
+    public void events () {
 
         ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
-        executorService.scheduleAtFixedRate(new Runnable() {
-            @Override
-            public void run() {
-                bananaX = random.nextInt((int) WIDTH / uSize) * uSize;
-                bananaY = random.nextInt((int) HEIGHT / uSize) * uSize;
+        executorService.scheduleAtFixedRate(() -> {
+            bananaX = random.nextInt( WIDTH / uSize) * uSize;
+            bananaY = random.nextInt( HEIGHT / uSize) * uSize;
 
-                for (int i = 0; i <= bParts - 1; i++) {
-                    if ((x[i] == bananaX && y[i] == bananaY) || (bananaX == appleX && bananaY == appleY)) {
-                        bananaX = random.nextInt((int) WIDTH / uSize) * uSize;
-                        bananaY = random.nextInt((int) HEIGHT / uSize) * uSize;
-                    }
+            for (int i = 0; i <= bParts - 1; i++) {
+                if ((x[i] == bananaX && y[i] == bananaY) || (bananaX == appleX && bananaY == appleY)) {
+                    bananaX = random.nextInt( WIDTH / uSize) * uSize;
+                    bananaY = random.nextInt( HEIGHT / uSize) * uSize;
                 }
             }
         },0,12,TimeUnit.SECONDS);
     }
 
     public void newApple () {
-                appleX = random.nextInt((int) WIDTH / uSize) * uSize;
-                appleY = random.nextInt((int) HEIGHT / uSize) * uSize;
+                appleX = random.nextInt( WIDTH / uSize) * uSize;
+                appleY = random.nextInt( HEIGHT / uSize) * uSize;
 
                 for (int i = 0 ; i<=bParts-1;i++){
                     if (x[i]==appleX && y[i]==appleY) {
-                        appleX = random.nextInt((int) WIDTH / uSize) * uSize;
-                        appleY = random.nextInt((int) HEIGHT / uSize) * uSize;
+                        appleX = random.nextInt( WIDTH / uSize) * uSize;
+                        appleY = random.nextInt( HEIGHT / uSize) * uSize;
                     }
                 }
     }
@@ -147,11 +148,11 @@ public class MyPanel extends JPanel implements ActionListener {
         }
     }
 
-    public void checkBananas() throws InterruptedException {
+    public void checkBananas() {
 
         if ((x[0] == bananaX) && (y[0] == bananaY)) {
             applesEaten=applesEaten+2;
-            Events();
+            events();
         }
     }
 
@@ -162,22 +163,19 @@ public class MyPanel extends JPanel implements ActionListener {
         }
 
         switch (direction) {
-            case 'U' : y[0] = y [0] - uSize;
-            break;
-            case 'D' : y[0] = y [0] + uSize;
-            break;
-            case 'L' : x[0] = x [0] - uSize;
-            break;
-            case 'R' : x[0] = x [0] + uSize;
-            break;
+            case 'U' -> y[0] = y[0] - uSize;
+            case 'D' -> y[0] = y[0] + uSize;
+            case 'L' -> x[0] = x[0] - uSize;
+            case 'R' -> x[0] = x[0] + uSize;
         }
 
     }
 
     public void checkCollisions () {
         for (int i = bParts ; i > 0 ; i--) {
-            if ((x[0] == x[i])&&(y[0] == y[i])) {
+            if ((x[0] == x[i]) && (y[0] == y[i])) {
                 running = false;
+                break;
             }
         }
         if (x[0]<0) {
@@ -240,11 +238,7 @@ public class MyPanel extends JPanel implements ActionListener {
             move();
             checkApple();
             checkCollisions();
-            try {
-                checkBananas();
-            } catch (InterruptedException interruptedException) {
-                interruptedException.printStackTrace();
-            }
+            checkBananas();
         }
         repaint();
 
@@ -263,27 +257,27 @@ public class MyPanel extends JPanel implements ActionListener {
     public class MyKeyAdapter extends KeyAdapter {
         @Override
         public void keyPressed (KeyEvent e) {
-            switch (e.getKeyCode()){
-                case KeyEvent.VK_LEFT:
-                    if (direction != 'R'){
+            switch (e.getKeyCode()) {
+                case KeyEvent.VK_LEFT -> {
+                    if (direction != 'R') {
                         direction = 'L';
                     }
-                    break;
-                case KeyEvent.VK_RIGHT:
-                    if (direction !='L'){
+                }
+                case KeyEvent.VK_RIGHT -> {
+                    if (direction != 'L') {
                         direction = 'R';
                     }
-                    break;
-                case KeyEvent.VK_UP:
-                    if (direction !='D'){
+                }
+                case KeyEvent.VK_UP -> {
+                    if (direction != 'D') {
                         direction = 'U';
                     }
-                    break;
-                case KeyEvent.VK_DOWN:
-                    if (direction !='U'){
+                }
+                case KeyEvent.VK_DOWN -> {
+                    if (direction != 'U') {
                         direction = 'D';
                     }
-                    break;
+                }
             }
         }
     }
